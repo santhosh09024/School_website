@@ -105,7 +105,7 @@ python -m unittest discover tests
 1. Set `FLASK_ENV=production` and update `SECRET_KEY` in `.env`.
 2. Execute Gunicorn application server:
    ```bash
-   gunicorn -w 4 -b 127.0.0.1:5000 "run:app"
+   gunicorn --bind 0.0.0.0:$PORT "run:app"
    ```
 3. Configure Nginx as reverse proxy listening on port 80/443 forwarding to `http://127.0.0.1:5000`.
 
@@ -113,3 +113,12 @@ python -m unittest discover tests
 
 ## 📄 License
 © 2026 Apex International Academy. All Rights Reserved.
+
+
+## ⚠️ GitHub Pages / GitHub Repository
+
+This is a **Flask + Python + database application**. GitHub Pages cannot execute the Flask backend. GitHub is used to store the source code; deploy the application to a Python-capable host such as Render, Railway, or PythonAnywhere.
+
+For Render, this repository includes `render.yaml`, `Procfile`, and `runtime.txt`. After connecting the repository, Render can build the app with `pip install -r requirements.txt` and start it with Gunicorn.
+
+> Note: SQLite on many cloud hosts is ephemeral. For persistent production data, use a managed PostgreSQL/MySQL database and set `DATABASE_URL`.
