@@ -1,0 +1,86 @@
+{% extends 'admin_base.html' %}
+{% block title %}CMS Notices{% endblock %}
+{% block header_title %}Publish Notices & Announcements{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-plus-circle text-primary me-2"></i> Publish Notice</h4>
+            <form method="POST" action="{{ url_for('cms.notices') }}" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Notice Title *</label>
+                    <input type="text" name="title" class="form-control" placeholder="Annual Sports Meet Announcement" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Target Audience *</label>
+                    <select name="target_role" class="form-select">
+                        <option value="All">All (Public & All Roles)</option>
+                        <option value="Teacher">Teachers Only</option>
+                        <option value="Student">Students Only</option>
+                        <option value="Parent">Parents Only</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Expiry Date</label>
+                    <input type="date" name="expiry_date" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">PDF Attachment (Optional)</label>
+                    <input type="file" name="attachment" class="form-control" accept=".pdf">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Notice Content *</label>
+                    <textarea name="content" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Publish Notice</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-newspaper me-2 text-warning"></i> Published Notices</h4>
+            <div class="table-responsive">
+                <table class="table custom-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Published</th>
+                            <th>Notice Title</th>
+                            <th>Target</th>
+                            <th>Attachment</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for n in notices %}
+                        <tr>
+                            <td><small>{{ n.publish_date }}</small></td>
+                            <td class="fw-bold">{{ n.title }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ n.target_role }}</span></td>
+                            <td>
+                                {% if n.attachment_path %}
+                                    <a href="{{ url_for('static', filename=n.attachment_path) }}" class="btn btn-sm btn-outline-primary" download><i class="fa-solid fa-file-pdf"></i></a>
+                                {% else %}
+                                    <span class="text-muted small">None</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <form method="POST" action="{{ url_for('cms.delete_notice', id=n.id) }}" class="d-inline" onsubmit="return confirm('Delete notice?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="text-center text-muted py-4">No published notices yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

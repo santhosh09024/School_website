@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}News & Official Notices - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">News & Official Announcements</h1>
+        <p class="lead opacity-75">Stay informed with the latest school circulars, academic notices, and schedules.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Search Bar -->
+    <form method="GET" action="{{ url_for('main.notices') }}" class="mb-5 max-w-lg mx-auto">
+        <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden">
+            <input type="text" name="q" class="form-control border-0 ps-4" placeholder="Search notices by keyword..." value="{{ query }}">
+            <button class="btn btn-warning px-4 fw-bold" type="submit"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
+        </div>
+    </form>
+
+    <div class="row g-4">
+        {% for n in notices %}
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 border-start border-4 border-primary">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-warning text-dark fw-bold"><i class="fa-regular fa-calendar me-1"></i> {{ n.publish_date }}</span>
+                    <span class="badge bg-light text-muted border">Target: {{ n.target_role }}</span>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">{{ n.title }}</h4>
+                <p class="text-muted mb-4">{{ n.content }}</p>
+                {% if n.attachment_path %}
+                <div class="mt-auto pt-3 border-top">
+                    <a href="{{ url_for('static', filename=n.attachment_path) }}" class="btn btn-sm btn-outline-primary fw-bold" download>
+                        <i class="fa-solid fa-file-pdf me-1"></i> Download PDF Attachment
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <i class="fa-solid fa-newspaper text-muted fs-1 mb-3"></i>
+            <p class="text-muted">No notices matching your search criteria.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

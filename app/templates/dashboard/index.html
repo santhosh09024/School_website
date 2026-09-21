@@ -1,0 +1,186 @@
+{% extends 'admin_base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- 8 Metric Stat Cards Grid -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">{{ metrics.total_students if metrics.total_students else 1200 }}</div>
+                <div class="metric-label">Total Students</div>
+            </div>
+            <div class="metric-icon blue"><i class="fa-solid fa-user-group"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">{{ metrics.total_teachers if metrics.total_teachers else 80 }}</div>
+                <div class="metric-label">Total Teachers</div>
+            </div>
+            <div class="metric-icon green"><i class="fa-solid fa-user-tie"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">{{ metrics.total_parents if metrics.total_parents else 350 }}</div>
+                <div class="metric-label">Total Parents</div>
+            </div>
+            <div class="metric-icon purple"><i class="fa-solid fa-users"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">{{ metrics.total_classes if metrics.total_classes else 25 }}</div>
+                <div class="metric-label">Total Classes</div>
+            </div>
+            <div class="metric-icon amber"><i class="fa-solid fa-school"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">{{ metrics.pending_admissions if metrics.pending_admissions else 15 }}</div>
+                <div class="metric-label">Pending Admissions</div>
+            </div>
+            <div class="metric-icon amber"><i class="fa-solid fa-hourglass-half"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">98%</div>
+                <div class="metric-label">Today's Attendance</div>
+            </div>
+            <div class="metric-icon green"><i class="fa-solid fa-clock"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value text-danger">₹ 2,45,800</div>
+                <div class="metric-label">Pending Fees</div>
+            </div>
+            <div class="metric-icon amber" style="background: #ffe4e6; color: #e11d48;"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="metric-card p-3">
+            <div>
+                <div class="metric-value">5</div>
+                <div class="metric-label">Upcoming Exams</div>
+            </div>
+            <div class="metric-icon blue"><i class="fa-solid fa-calendar-day"></i></div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-bold text-dark mb-0">Student Overview</h5>
+                    <small class="text-muted">(This Academic Year)</small>
+                </div>
+            </div>
+            <div style="height: 250px;">
+                <canvas id="studentLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-bold text-dark mb-0">Attendance Overview</h5>
+                    <small class="text-muted">(This Month)</small>
+                </div>
+            </div>
+            <div style="height: 250px; position: relative;">
+                <canvas id="attendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Dual Cards -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-dark mb-0">Recent Admissions</h5>
+                <a href="{{ url_for('cms.admissions') }}" class="btn btn-sm btn-outline-primary fw-bold px-3">View All</a>
+            </div>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=100&q=80" class="rounded-circle" style="width: 42px; height: 42px; object-fit: cover;" alt="Aarav">
+                        <div>
+                            <div class="fw-bold text-dark" style="font-size: 0.95rem;">Aarav Sharma</div>
+                            <div class="text-muted small">Class 5 &bull; 22 May, 2025</div>
+                        </div>
+                    </div>
+                    <span class="badge bg-warning-subtle text-dark border border-warning fw-bold">Pending</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" class="rounded-circle" style="width: 42px; height: 42px; object-fit: cover;" alt="Diya">
+                        <div>
+                            <div class="fw-bold text-dark" style="font-size: 0.95rem;">Diya Patel</div>
+                            <div class="text-muted small">Class 3 &bull; 21 May, 2025</div>
+                        </div>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success fw-bold">Approved</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=100&q=80" class="rounded-circle" style="width: 42px; height: 42px; object-fit: cover;" alt="Rohan">
+                        <div>
+                            <div class="fw-bold text-dark" style="font-size: 0.95rem;">Rohan Singh</div>
+                            <div class="text-muted small">Class 8 &bull; 20 May, 2025</div>
+                        </div>
+                    </div>
+                    <span class="badge bg-warning-subtle text-dark border border-warning fw-bold">Pending</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-dark mb-0">Recent Notices</h5>
+                <a href="{{ url_for('cms.notices') }}" class="btn btn-sm btn-outline-primary fw-bold px-3">View All</a>
+            </div>
+            <div class="d-flex flex-column gap-3">
+                <div class="p-2 bg-light rounded-3 d-flex align-items-center gap-3">
+                    <i class="fa-solid fa-file-lines text-primary fs-3"></i>
+                    <div>
+                        <div class="fw-bold text-dark" style="font-size: 0.95rem;">Annual Sports Day - 25 May 2025</div>
+                        <div class="text-muted small">Published 20 May, 2025</div>
+                    </div>
+                </div>
+                <div class="p-2 bg-light rounded-3 d-flex align-items-center gap-3">
+                    <i class="fa-solid fa-file-lines text-danger fs-3"></i>
+                    <div>
+                        <div class="fw-bold text-dark" style="font-size: 0.95rem;">Summer Vacation From 10 June 2025</div>
+                        <div class="text-muted small">Published 18 May, 2025</div>
+                    </div>
+                </div>
+                <div class="p-2 bg-light rounded-3 d-flex align-items-center gap-3">
+                    <i class="fa-solid fa-file-lines text-info fs-3"></i>
+                    <div>
+                        <div class="fw-bold text-dark" style="font-size: 0.95rem;">Parent Teacher Meeting - 30 May 2025</div>
+                        <div class="text-muted small">Published 15 May, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

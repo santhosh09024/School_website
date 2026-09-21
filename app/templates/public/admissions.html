@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}Online Admissions & Registration - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Online Admissions 2025-2026</h1>
+        <p class="lead opacity-75">Begin your journey towards academic excellence with Apex International Academy.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+
+    <!-- Track Application Banner -->
+    <div class="card border-0 shadow-sm bg-light p-4 mb-5 rounded-4">
+        <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-magnifying-glass text-warning me-2"></i> Track Existing Admission Application</h4>
+        <form method="GET" action="{{ url_for('main.admissions') }}" class="row g-3">
+            <div class="col-md-9">
+                <input type="text" name="search_app_no" class="form-control form-control-lg" placeholder="Enter Application Number (e.g., ADM-2026-XXXXX)" required>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">Check Status</button>
+            </div>
+        </form>
+
+        {% if tracked_app %}
+        <div class="mt-4 p-3 bg-white rounded border">
+            <h5 class="fw-bold text-primary mb-2">Application # {{ tracked_app.application_number }}</h5>
+            <div class="row">
+                <div class="col-md-4"><strong>Student Name:</strong> {{ tracked_app.student_name }}</div>
+                <div class="col-md-4"><strong>Class Applying:</strong> {{ tracked_app.class_applying }}</div>
+                <div class="col-md-4"><strong>Current Status:</strong> <span class="badge bg-warning text-dark">{{ tracked_app.status }}</span></div>
+            </div>
+            {% if tracked_app.admin_notes %}
+            <div class="mt-2 text-muted small"><strong>Notes:</strong> {{ tracked_app.admin_notes }}</div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Application Form -->
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
+                <h3 class="fw-bold text-dark mb-4"><i class="fa-solid fa-file-pen text-primary me-2"></i> Admission Application Form</h3>
+                <form method="POST" action="{{ url_for('main.admissions') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <h5 class="text-primary fw-bold mb-3">1. Student Information</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Student Full Name *</label>
+                            <input type="text" name="student_name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Date of Birth *</label>
+                            <input type="date" name="date_of_birth" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Gender *</label>
+                            <select name="gender" class="form-select" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Class Applying For *</label>
+                            <select name="class_applying" class="form-select" required>
+                                {% for c in classes %}
+                                    <option value="{{ c.name }}">{{ c.name }} ({{ c.category }})</option>
+                                {% else %}
+                                    <option value="Class 10">Class 10</option>
+                                    <option value="Class 9">Class 9</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Previous School Name</label>
+                            <input type="text" name="previous_school" class="form-control" placeholder="St. Jude Academy">
+                        </div>
+                    </div>
+
+                    <h5 class="text-primary fw-bold mb-3">2. Parent / Guardian Details</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Parent / Guardian Full Name *</label>
+                            <input type="text" name="parent_name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Phone Number *</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="+1 555-0199" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email Address *</label>
+                            <input type="email" name="email" class="form-control" placeholder="parent@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Residential Address *</label>
+                            <input type="text" name="address" class="form-control" placeholder="123 Street, City" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Academic Details & Achievements</label>
+                        <textarea name="academic_details" class="form-control" rows="3" placeholder="Specify previous grades, sports achievements, or special awards..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-custom-primary btn-lg w-100 fw-bold">Submit Online Application</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-list-check text-warning me-2"></i> Required Documents</h5>
+                <ul class="list-group list-group-flush small text-muted">
+                    <li class="list-group-item bg-transparent"><i class="fa-solid fa-check text-success me-2"></i> Student Birth Certificate</li>
+                    <li class="list-group-item bg-transparent"><i class="fa-solid fa-check text-success me-2"></i> Previous Academic Report Cards</li>
+                    <li class="list-group-item bg-transparent"><i class="fa-solid fa-check text-success me-2"></i> Transfer Certificate (TC)</li>
+                    <li class="list-group-item bg-transparent"><i class="fa-solid fa-check text-success me-2"></i> Passport Size Photographs (4 Copies)</li>
+                    <li class="list-group-item bg-transparent"><i class="fa-solid fa-check text-success me-2"></i> Parent Identity Proof</li>
+                </ul>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-primary text-white">
+                <h5 class="fw-bold mb-2"><i class="fa-solid fa-graduation-cap text-warning me-2"></i> Scholarship Program</h5>
+                <p class="small opacity-75">We offer merit-based scholarships covering up to 100% of tuition fees for high-performing academic and athletic applicants.</p>
+                <a href="{{ url_for('main.contact') }}" class="btn btn-light btn-sm fw-bold text-primary">Inquire About Scholarships</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

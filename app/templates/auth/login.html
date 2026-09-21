@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Portal Login - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="py-5 bg-light min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+                    <div class="text-center mb-4">
+                        <i class="fa-solid fa-graduation-cap text-primary display-4 mb-2"></i>
+                        <h3 class="fw-bold text-dark mb-1">School Portal Login</h3>
+                        <p class="text-muted small">Sign in to access your role-based dashboard</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('auth.login') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Username or Email *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fa-solid fa-user text-muted"></i></span>
+                                <input type="text" name="username" class="form-control" placeholder="Enter username..." required autofocus>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Password *</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="Enter password..." required>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                                <label class="form-check-label small" for="remember">Remember me</label>
+                            </div>
+                            <a href="#" class="small text-primary text-decoration-none fw-semibold">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">Log In <i class="fa-solid fa-arrow-right-to-bracket ms-1"></i></button>
+                    </form>
+
+                    <!-- Demo Credentials Helper -->
+                    <div class="mt-4 p-3 bg-light rounded border">
+                        <small class="fw-bold text-dark d-block mb-1"><i class="fa-solid fa-key me-1 text-warning"></i> Demo Login Accounts:</small>
+                        <ul class="list-unstyled small text-muted mb-0" style="font-size: 0.8rem;">
+                            <li><strong>SuperAdmin:</strong> superadmin / admin123</li>
+                            <li><strong>Admin:</strong> admin / admin123</li>
+                            <li><strong>Teacher:</strong> teacher_john / teacher123</li>
+                            <li><strong>Parent:</strong> parent_robert / parent123</li>
+                            <li><strong>Student:</strong> student_alex / student123</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Get in Touch</h1>
+        <p class="lead opacity-75">We are here to answer your questions and welcome you to our school campus.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
+                <h3 class="fw-bold text-dark mb-4"><i class="fa-solid fa-paper-plane text-primary me-2"></i> Send Us a Message</h3>
+                <form method="POST" action="{{ url_for('main.contact') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Your Name *</label>
+                            <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email Address *</label>
+                            <input type="email" name="email" class="form-control" placeholder="john@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Phone Number</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="+1 555-0199">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Subject *</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Admission Inquiry" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Your Message *</label>
+                            <textarea name="message" class="form-control" rows="5" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-custom-primary btn-lg w-100 fw-bold">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h4 class="fw-bold text-dark mb-4">Contact Information</h4>
+                <div class="d-flex gap-3 mb-4">
+                    <i class="fa-solid fa-location-dot text-primary fs-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Campus Address</h6>
+                        <p class="text-muted mb-0">{{ school_settings.address }}</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-3 mb-4">
+                    <i class="fa-solid fa-phone text-success fs-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Phone Numbers</h6>
+                        <p class="text-muted mb-0">{{ school_settings.phone }}</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-3 mb-4">
+                    <i class="fa-solid fa-envelope text-warning fs-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Email Inquiry</h6>
+                        <p class="text-muted mb-0">{{ school_settings.email }}</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <i class="fa-solid fa-clock text-info fs-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Office Hours</h6>
+                        <p class="text-muted mb-0">{{ school_settings.office_hours }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

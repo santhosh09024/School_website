@@ -1,0 +1,80 @@
+{% extends 'admin_base.html' %}
+{% block title %}{% if teacher %}Edit Teacher{% else %}Add Teacher{% endif %}{% endblock %}
+{% block header_title %}{% if teacher %}Edit Teacher Profile{% else %}Create New Teacher Record{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+            <h4 class="fw-bold text-dark mb-4"><i class="fa-solid fa-user-tie me-2 text-primary"></i> {% if teacher %}Edit Teacher Information{% else %}Teacher Registration{% endif %}</h4>
+
+            <form method="POST" action="{% if teacher %}{{ url_for('teacher.edit', id=teacher.id) }}{% else %}{{ url_for('teacher.add') }}{% endif %}" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">First Name *</label>
+                        <input type="text" name="first_name" class="form-control" value="{{ teacher.first_name if teacher else '' }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Last Name *</label>
+                        <input type="text" name="last_name" class="form-control" value="{{ teacher.last_name if teacher else '' }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Employee ID *</label>
+                        <input type="text" name="employee_id" class="form-control" value="{{ teacher.employee_id if teacher else '' }}" {% if teacher %}readonly{% endif %} placeholder="e.g. EMP-1005" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Designation *</label>
+                        <input type="text" name="designation" class="form-control" value="{{ teacher.designation if teacher else '' }}" placeholder="Senior Science Teacher" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Department *</label>
+                        <input type="text" name="department" class="form-control" value="{{ teacher.department if teacher else '' }}" placeholder="Science / Mathematics" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Gender *</label>
+                        <select name="gender" class="form-select" required>
+                            <option value="Male" {% if teacher and teacher.gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if teacher and teacher.gender == 'Female' %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Qualification</label>
+                        <input type="text" name="qualification" class="form-control" value="{{ teacher.qualification if teacher else '' }}" placeholder="M.Sc. Physics, B.Ed">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Years Experience</label>
+                        <input type="number" name="experience_years" class="form-control" value="{{ teacher.experience_years if teacher else 0 }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Phone Number *</label>
+                        <input type="tel" name="phone" class="form-control" value="{{ teacher.phone if teacher else '' }}" required>
+                    </div>
+                </div>
+
+                {% if not teacher %}
+                <h5 class="text-primary fw-bold mb-3">Account Credentials</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Username *</label>
+                        <input type="text" name="username" class="form-control" placeholder="teacher_john" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Email *</label>
+                        <input type="email" name="email" class="form-control" placeholder="teacher@school.com" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Password *</label>
+                        <input type="password" name="password" class="form-control" value="teacher123" required>
+                    </div>
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary btn-lg fw-bold px-4">{% if teacher %}Save Changes{% else %}Create Teacher Record{% endif %}</button>
+                <a href="{{ url_for('teacher.index') }}" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

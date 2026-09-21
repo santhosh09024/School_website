@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}Public Examination Result Portal - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Examination Result Portal</h1>
+        <p class="lead opacity-75">Check board & term examination performance instantly.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Result Search Form -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5">
+                <h3 class="fw-bold text-center text-dark mb-4"><i class="fa-solid fa-graduation-cap text-warning me-2"></i> Student Result Lookup</h3>
+                <form method="POST" action="{{ url_for('main.results') }}" id="public-result-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Admission No / Roll No *</label>
+                            <input type="text" name="identifier" id="identifier-input" class="form-control form-control-lg" placeholder="e.g. ADM-2025-001 or 1001" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Date of Birth *</label>
+                            <input type="date" name="date_of_birth" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">Fetch Marksheet <i class="fa-solid fa-arrow-right me-1"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display Marksheet Card -->
+    {% if search_performed %}
+        {% if student and exam_marks %}
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white" id="printable-marksheet">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
+                        <div>
+                            <h3 class="fw-bold text-primary mb-1">{{ school_settings.school_name }}</h3>
+                            <div class="text-muted small">Official Board Examination Marksheet</div>
+                        </div>
+                        <button onclick="window.print();" class="btn btn-outline-secondary btn-sm fw-bold">
+                            <i class="fa-solid fa-print me-1"></i> Print / Download Marksheet
+                        </button>
+                    </div>
+
+                    <div class="row g-3 mb-4 bg-light p-3 rounded">
+                        <div class="col-md-4"><strong>Student Name:</strong> {{ student.full_name }}</div>
+                        <div class="col-md-4"><strong>Admission No:</strong> {{ student.admission_number }}</div>
+                        <div class="col-md-4"><strong>Roll Number:</strong> {{ student.roll_number }}</div>
+                        <div class="col-md-4"><strong>Class & Section:</strong> {{ student.class_obj.name }} ({{ student.section_obj.name }})</div>
+                        <div class="col-md-4"><strong>Academic Year:</strong> {{ student.academic_year.year_label if student.academic_year else '2025-2026' }}</div>
+                        <div class="col-md-4"><strong>Overall Grade:</strong> <span class="badge bg-success fs-6">{{ overall_grade }}</span></div>
+                    </div>
+
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Subject Code & Name</th>
+                                <th class="text-center">Internal (20)</th>
+                                <th class="text-center">Theory (60)</th>
+                                <th class="text-center">Practical (20)</th>
+                                <th class="text-center">Total Marks (100)</th>
+                                <th class="text-center">Grade</th>
+                                <th class="text-center">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for m in exam_marks %}
+                            <tr>
+                                <td class="fw-bold">{{ m.subject_obj.name }} ({{ m.subject_obj.code }})</td>
+                                <td class="text-center">{{ m.internal_marks }}</td>
+                                <td class="text-center">{{ m.theory_marks }}</td>
+                                <td class="text-center">{{ m.practical_marks }}</td>
+                                <td class="text-center fw-bold">{{ m.total_marks }}</td>
+                                <td class="text-center fw-bold">{{ m.grade }}</td>
+                                <td class="text-center">
+                                    {% if m.is_pass %}
+                                        <span class="badge bg-success">PASS</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">FAIL</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="table-light fw-bold">
+                            <tr>
+                                <td colspan="4" class="text-end">Aggregate Total Marks:</td>
+                                <td class="text-center text-primary fs-5">{{ total_obtained }} / {{ total_max }}</td>
+                                <td class="text-center">Percentage: {{ overall_percentage }}%</td>
+                                <td class="text-center">FINAL RESULT: PASS</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fa-solid fa-circle-exclamation text-warning fs-1 mb-3"></i>
+            <h4 class="fw-bold text-dark">No Results Found</h4>
+            <p class="text-muted">No examination record matches the entered credentials. Please verify your Roll/Admission number and Date of Birth.</p>
+        </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

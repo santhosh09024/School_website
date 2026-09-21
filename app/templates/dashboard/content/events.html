@@ -1,0 +1,71 @@
+{% extends 'admin_base.html' %}
+{% block title %}CMS Events{% endblock %}
+{% block header_title %}Event Management{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-plus-circle text-primary me-2"></i> Create Event</h4>
+            <form method="POST" action="{{ url_for('cms.events') }}" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Event Title *</label>
+                    <input type="text" name="title" class="form-control" placeholder="Science Fair 2026" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Event Date *</label>
+                    <input type="date" name="event_date" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Event Time</label>
+                    <input type="text" name="event_time" class="form-control" value="09:00 AM - 02:00 PM">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Location</label>
+                    <input type="text" name="location" class="form-control" value="Main Campus Quadrangle">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Registration URL (Optional)</label>
+                    <input type="url" name="registration_link" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description *</label>
+                    <textarea name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Create Event</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-calendar-check me-2 text-warning"></i> Events List</h4>
+            <div class="table-responsive">
+                <table class="table custom-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Event Title</th>
+                            <th>Location</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in events %}
+                        <tr>
+                            <td class="fw-bold text-primary">{{ e.event_date }}</td>
+                            <td class="fw-semibold">{{ e.title }}</td>
+                            <td>{{ e.location }}</td>
+                            <td><small>{{ e.event_time }}</small></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center text-muted py-4">No events created.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

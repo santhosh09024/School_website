@@ -1,0 +1,49 @@
+{% extends 'admin_base.html' %}
+{% block title %}CMS Gallery{% endblock %}
+{% block header_title %}Photo Gallery Uploader{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-cloud-arrow-up text-primary me-2"></i> Upload Photos</h4>
+            <form method="POST" action="{{ url_for('cms.gallery') }}" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Album Title *</label>
+                    <input type="text" name="album_title" class="form-control" placeholder="Annual Day 2026" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Album Description</label>
+                    <textarea name="description" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Select Images *</label>
+                    <input type="file" name="images" class="form-control" accept="image/*" multiple required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Upload Photos</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-images me-2 text-warning"></i> Existing Albums</h4>
+            <div class="row g-3">
+                {% for a in albums %}
+                <div class="col-md-6">
+                    <div class="p-3 border rounded">
+                        <h6 class="fw-bold mb-1">{{ a.title }}</h6>
+                        <p class="text-muted small mb-0">{{ a.description or 'No description' }}</p>
+                        <small class="text-primary">{{ a.images.count() }} Photos Uploaded</small>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center text-muted py-4">No gallery albums created yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

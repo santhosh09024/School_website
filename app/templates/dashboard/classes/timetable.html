@@ -1,0 +1,133 @@
+{% extends 'admin_base.html' %}
+{% block title %}Class Timetable{% endblock %}
+{% block header_title %}Class Schedule & Timetable Management{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-calendar-days me-2 text-primary"></i> Class Timetable Grid</h4>
+            <small class="text-muted">Select class to view or configure period schedules.</small>
+        </div>
+        <form method="GET" action="{{ url_for('academic.timetable') }}" class="d-flex gap-2">
+            <select name="class_id" class="form-select" onchange="this.form.submit();">
+                <option value="">-- Select Class --</option>
+                {% for c in classes %}
+                    <option value="{{ c.id }}" {% if selected_class == c.id %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if selected_class %}
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 p-3 bg-light">
+                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-plus me-1 text-success"></i> Add Timetable Slot</h5>
+                <form method="POST" action="{{ url_for('academic.timetable') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="class_id" value="{{ selected_class }}">
+
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Section</label>
+                        <select name="section_id" class="form-select form-select-sm" required>
+                            {% for s in sections %}
+                                <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Day of Week</label>
+                        <select name="day_of_week" class="form-select form-select-sm" required>
+                            {% for day in days %}
+                                <option value="{{ day }}">{{ day }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Period #</label>
+                            <input type="number" name="period_number" class="form-control form-control-sm" value="1" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Room</label>
+                            <input type="text" name="room_number" class="form-control form-control-sm" value="Room 101">
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">Start Time</label>
+                            <input type="text" name="start_time" class="form-control form-control-sm" value="08:30 AM" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold">End Time</label>
+                            <input type="text" name="end_time" class="form-control form-control-sm" value="09:15 AM" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label small fw-semibold">Subject</label>
+                        <select name="subject_id" class="form-select form-select-sm" required>
+                            {% for subj in subjects %}
+                                <option value="{{ subj.id }}">{{ subj.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Teacher</label>
+                        <select name="teacher_id" class="form-select form-select-sm">
+                            <option value="">-- Unassigned --</option>
+                            {% for t in teachers %}
+                                <option value="{{ t.id }}">{{ t.full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Add Slot</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle text-center bg-white">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Period</th>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Room</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in timetable_items %}
+                        <tr>
+                            <td class="fw-bold">#{{ item.period_number }}</td>
+                            <td><span class="badge bg-secondary">{{ item.day_of_week }}</span></td>
+                            <td><small>{{ item.start_time }} - {{ item.end_time }}</small></td>
+                            <td class="fw-bold text-primary">{{ item.subject_obj.name }}</td>
+                            <td>{{ item.teacher_obj.full_name if item.teacher_obj else 'Staff' }}</td>
+                            <td>{{ item.room_number }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="6" class="text-muted py-4">No timetable entries configured for this class.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="fa-solid fa-arrow-up-long fs-2 mb-2"></i>
+        <p>Please select a class from the dropdown above to view its timetable.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

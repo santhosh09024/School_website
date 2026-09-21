@@ -1,0 +1,53 @@
+{% extends 'admin_base.html' %}
+{% block title %}Messages Inbox{% endblock %}
+{% block header_title %}Contact Inquiries Inbox{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-envelope me-2 text-primary"></i> Public Contact Messages</h4>
+
+    <div class="table-responsive">
+        <table class="table custom-table align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Sender Name</th>
+                    <th>Email & Phone</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in messages %}
+                <tr class="{% if not msg.is_read %}fw-bold table-light{% endif %}">
+                    <td><small>{{ msg.created_at.strftime('%Y-%m-%d %H:%M') }}</small></td>
+                    <td>{{ msg.name }}</td>
+                    <td><small>{{ msg.email }}<br>{{ msg.phone or '' }}</small></td>
+                    <td>{{ msg.subject }}</td>
+                    <td><small>{{ msg.message }}</small></td>
+                    <td>
+                        {% if msg.is_read %}
+                            <span class="badge bg-secondary">Read</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Unread</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        {% if not msg.is_read %}
+                        <form method="POST" action="{{ url_for('cms.mark_message_read', id=msg.id) }}" class="d-inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-sm btn-outline-success"><i class="fa-solid fa-check"></i> Mark Read</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center text-muted py-4">No contact messages received.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

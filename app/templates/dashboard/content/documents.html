@@ -1,0 +1,72 @@
+{% extends 'admin_base.html' %}
+{% block title %}CMS Documents{% endblock %}
+{% block header_title %}Download Center File Uploader{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-file-upload text-primary me-2"></i> Upload Document</h4>
+            <form method="POST" action="{{ url_for('cms.documents') }}" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Document Title *</label>
+                    <input type="text" name="title" class="form-control" placeholder="Class 10 Syllabus" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Category *</label>
+                    <select name="category" class="form-select">
+                        <option value="Prospectus">Prospectus</option>
+                        <option value="Syllabus" selected>Syllabus</option>
+                        <option value="Application Forms">Application Forms</option>
+                        <option value="Exam Schedules">Exam Schedules</option>
+                        <option value="Circulars">Circulars</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Select File (PDF / Word) *</label>
+                    <input type="file" name="document" class="form-control" accept=".pdf,.doc,.docx" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Upload to Download Center</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-folder-open me-2 text-warning"></i> Uploaded Documents</h4>
+            <div class="table-responsive">
+                <table class="table custom-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Document Title</th>
+                            <th>File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in documents %}
+                        <tr>
+                            <td><span class="badge bg-primary-subtle text-primary fw-bold">{{ d.category }}</span></td>
+                            <td class="fw-semibold">{{ d.title }}</td>
+                            <td>
+                                <a href="{{ url_for('static', filename=d.file_path) }}" class="btn btn-sm btn-outline-primary fw-bold" download>
+                                    <i class="fa-solid fa-download me-1"></i> Download
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="3" class="text-center text-muted py-4">No documents uploaded.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

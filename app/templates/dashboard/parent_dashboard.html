@@ -1,0 +1,49 @@
+{% extends 'admin_base.html' %}
+{% block title %}Parent Portal{% endblock %}
+{% block header_title %}Parent Portal - Child Progress Oversight{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-users me-2 text-primary"></i> Parent Account</h5>
+            <p class="text-muted mb-0">Father: {{ parent.father_name if parent else current_user.username }} | Mother: {{ parent.mother_name if parent else '' }}</p>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="metric-card">
+            <div>
+                <div class="metric-label">Registered Children</div>
+                <div class="metric-value">{{ children|length }}</div>
+            </div>
+            <div class="metric-icon green"><i class="fa-solid fa-child"></i></div>
+        </div>
+    </div>
+</div>
+
+<h4 class="fw-bold text-dark mb-3">Children Academic Overview</h4>
+<div class="row g-4">
+    {% for child in children %}
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <div class="d-flex align-items-center gap-3 mb-3 border-bottom pb-3">
+                <div class="user-avatar fs-2" style="width: 50px; height: 50px;">{{ child.first_name[0] }}</div>
+                <div>
+                    <h5 class="fw-bold text-dark mb-0">{{ child.full_name }}</h5>
+                    <div class="text-muted small">Class: {{ child.class_obj.name }} | Roll #: {{ child.roll_number }}</div>
+                </div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{{ url_for('examination.index') }}" class="btn btn-sm btn-outline-primary fw-bold"><i class="fa-solid fa-award me-1"></i> View Report Cards</a>
+                <a href="{{ url_for('attendance.report', class_id=child.class_id) }}" class="btn btn-sm btn-outline-success fw-bold"><i class="fa-solid fa-clipboard-user me-1"></i> Attendance Log</a>
+                <a href="{{ url_for('fee.index') }}" class="btn btn-sm btn-outline-warning text-dark fw-bold"><i class="fa-solid fa-receipt me-1"></i> Fee Status</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-4">
+        <p class="text-muted">No child student profiles linked to this parent account yet.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

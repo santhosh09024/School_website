@@ -1,0 +1,56 @@
+{% extends 'admin_base.html' %}
+{% block title %}Manage Teachers{% endblock %}
+{% block header_title %}Teacher Directory & Faculty Management{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chalkboard-user me-2 text-primary"></i> Faculty Directory</h4>
+            <small class="text-muted">Manage teacher profiles, departments, and class subject assignments.</small>
+        </div>
+        <a href="{{ url_for('teacher.add') }}" class="btn btn-primary fw-bold"><i class="fa-solid fa-plus me-1"></i> Add New Teacher</a>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive">
+        <table class="table custom-table align-middle">
+            <thead>
+                <tr>
+                    <th>Emp ID</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Qualification</th>
+                    <th>Phone / Email</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in teachers %}
+                <tr>
+                    <td class="fw-bold text-primary">{{ t.employee_id }}</td>
+                    <td>
+                        <div class="fw-semibold text-dark">{{ t.full_name }}</div>
+                    </td>
+                    <td><span class="badge bg-primary-subtle text-primary fw-bold">{{ t.designation }}</span></td>
+                    <td>{{ t.department }}</td>
+                    <td>{{ t.qualification }}</td>
+                    <td><small>{{ t.phone }}<br>{{ t.email }}</small></td>
+                    <td class="text-end">
+                        <a href="{{ url_for('teacher.assign', id=t.id) }}" class="btn btn-sm btn-outline-success me-1" title="Assign Classes"><i class="fa-solid fa-book"></i> Assign</a>
+                        <a href="{{ url_for('teacher.edit', id=t.id) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                        <form method="POST" action="{{ url_for('teacher.delete', id=t.id) }}" class="d-inline" onsubmit="return confirm('Delete teacher record?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center text-muted py-4">No teacher records found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Photo & Video Gallery - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Campus Photo Gallery</h1>
+        <p class="lead opacity-75">Capturing moments of achievement, friendship, and campus life.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Album Cards -->
+    <h3 class="fw-bold text-dark mb-4">Photo Albums</h3>
+    <div class="row g-4 mb-5">
+        {% for a in albums %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="{{ a.title }}" style="height: 220px; object-fit: cover;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold text-dark mb-1">{{ a.title }}</h5>
+                    <p class="text-muted small mb-0">{{ a.description or 'Campus highlights and ceremony photos.' }}</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-4">
+            <p class="text-muted">No photo albums uploaded yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Campus Gallery Grid -->
+    <h3 class="fw-bold text-dark mb-4">Campus Highlights</h3>
+    <div class="row g-3">
+        <div class="col-md-4 col-6">
+            <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80" class="img-fluid rounded-4 shadow-sm" alt="Main Building">
+        </div>
+        <div class="col-md-4 col-6">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" class="img-fluid rounded-4 shadow-sm" alt="Science Lab">
+        </div>
+        <div class="col-md-4 col-6">
+            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" class="img-fluid rounded-4 shadow-sm" alt="Library">
+        </div>
+    </div>
+</div>
+{% endblock %}

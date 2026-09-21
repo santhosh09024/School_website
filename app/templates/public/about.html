@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}About Us - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<!-- Page Banner -->
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">About Our Academy</h1>
+        <p class="lead opacity-75">Building a legacy of leadership, discovery, and educational distinction.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Vision & Mission -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="p-4 bg-white rounded-3 shadow-sm h-100 border-start border-4 border-primary">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fa-solid fa-eye text-primary fs-2 me-3"></i>
+                    <h3 class="fw-bold mb-0">Our Vision</h3>
+                </div>
+                <p class="text-muted">To be a globally recognized institution of learning that nurtures compassionate leaders, critical thinkers, and ethical innovators prepared to solve complex challenges of tomorrow.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-4 bg-white rounded-3 shadow-sm h-100 border-start border-4 border-warning">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fa-solid fa-bullseye text-warning fs-2 me-3"></i>
+                    <h3 class="fw-bold mb-0">Our Mission</h3>
+                </div>
+                <p class="text-muted">To provide a transformational educational environment through holistic curricula, state-of-the-art infrastructure, world-class faculty, and character-driven mentorship.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chairman & Principal Messages -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <h4 class="fw-bold text-primary mb-3"><i class="fa-solid fa-quote-left me-2 text-warning"></i> Chairman's Address</h4>
+                <p class="text-muted fs-6">"Since our founding, our mandate has been clear: foster an inclusive sanctuary of knowledge where every child's talent is recognized and cultivated."</p>
+                <div class="mt-auto">
+                    <h6 class="fw-bold text-dark mb-0">{{ school_settings.chairman_name }}</h6>
+                    <small class="text-muted">Chairman, Board of Governors</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <h4 class="fw-bold text-primary mb-3"><i class="fa-solid fa-quote-left me-2 text-warning"></i> Principal's Message</h4>
+                <p class="text-muted fs-6">"We believe education extends beyond textbooks. Our dual focus on academic mastery and moral integrity ensures our graduates shine in top universities worldwide."</p>
+                <div class="mt-auto">
+                    <h6 class="fw-bold text-dark mb-0">{{ school_settings.principal_name }}</h6>
+                    <small class="text-muted">Principal & Director</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Values Timeline -->
+    <div class="py-4">
+        <h3 class="fw-bold text-center mb-4">Our Core Pillars</h3>
+        <div class="row g-4 text-center">
+            <div class="col-md-3">
+                <div class="p-3 bg-white rounded-3 shadow-sm">
+                    <i class="fa-solid fa-award text-primary fs-1 mb-2"></i>
+                    <h5 class="fw-bold">Excellence</h5>
+                    <p class="text-muted small">Striving for the highest standards in academics, sports, and arts.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 bg-white rounded-3 shadow-sm">
+                    <i class="fa-solid fa-hand-holding-heart text-danger fs-1 mb-2"></i>
+                    <h5 class="fw-bold">Integrity</h5>
+                    <p class="text-muted small">Upholding moral courage, honesty, and empathy in all pursuits.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 bg-white rounded-3 shadow-sm">
+                    <i class="fa-solid fa-lightbulb text-warning fs-1 mb-2"></i>
+                    <h5 class="fw-bold">Innovation</h5>
+                    <p class="text-muted small">Encouraging curiosity, scientific inquiry, and technological literacy.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 bg-white rounded-3 shadow-sm">
+                    <i class="fa-solid fa-globe text-success fs-1 mb-2"></i>
+                    <h5 class="fw-bold">Global Mindset</h5>
+                    <p class="text-muted small">Preparing students to navigate diverse cultures and global careers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

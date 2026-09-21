@@ -1,0 +1,100 @@
+{% extends 'admin_base.html' %}
+{% block title %}Manage Admissions{% endblock %}
+{% block header_title %}Admission Applications Review{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-file-signature me-2 text-warning"></i> Online Admission Applications</h4>
+            <small class="text-muted">Review, approve, or reject student registration forms.</small>
+        </div>
+        <form method="GET" action="{{ url_for('cms.admissions') }}" class="d-flex gap-2">
+            <select name="status" class="form-select" onchange="this.form.submit();">
+                <option value="">All Statuses</option>
+                <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Approved" {% if selected_status == 'Approved' %}selected{% endif %}>Approved</option>
+                <option value="Rejected" {% if selected_status == 'Rejected' %}selected{% endif %}>Rejected</option>
+            </select>
+        </form>
+    </div>
+
+    <!-- Applications Table -->
+    <div class="table-responsive">
+        <table class="table custom-table align-middle">
+            <thead>
+                <tr>
+                    <th>App No</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Parent / Phone</th>
+                    <th>DOB</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td class="fw-bold text-primary">{{ app.application_number }}</td>
+                    <td class="fw-semibold">{{ app.student_name }}</td>
+                    <td>{{ app.class_applying }}</td>
+                    <td><small>{{ app.parent_name }}<br>{{ app.phone }}</small></td>
+                    <td>{{ app.date_of_birth }}</td>
+                    <td><span class="badge-status {{ app.status.lower().replace(' ', '-') }}">{{ app.status }}</span></td>
+                    <td class="text-end">
+                        <!-- Action Modal Trigger -->
+                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold" data-bs-toggle="modal" data-bs-target="#appModal{{ app.id }}">
+                            Review
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade text-start" id="appModal{{ app.id }}" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content rounded-4 border-0">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title fw-bold">Review App # {{ app.application_number }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <form method="POST" action="{{ url_for('cms.update_admission_status', id=app.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <div class="modal-body">
+                                            <p><strong>Student:</strong> {{ app.student_name }} ({{ app.gender }})</p>
+                                            <p><strong>Applying For:</strong> {{ app.class_applying }}</p>
+                                            <p><strong>Previous School:</strong> {{ app.previous_school or 'N/A' }}</p>
+                                            <p><strong>Parent Contact:</strong> {{ app.parent_name }} ({{ app.phone }}, {{ app.email }})</p>
+                                            <p><strong>Address:</strong> {{ app.address }}</p>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label fw-semibold">Update Status</label>
+                                                <select name="status" class="form-select">
+                                                    <option value="Pending" {% if app.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                                    <option value="Under Review" {% if app.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+                                                    <option value="Approved" {% if app.status == 'Approved' %}selected{% endif %}>Approved</option>
+                                                    <option value="Rejected" {% if app.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-semibold">Admin Remarks / Notes</label>
+                                                <textarea name="admin_notes" class="form-control" rows="2">{{ app.admin_notes or '' }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary fw-bold">Save Status</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center text-muted py-4">No admission applications match current filter.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

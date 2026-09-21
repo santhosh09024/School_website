@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Server Error (500) - Apex Academy{% endblock %}
+{% block content %}
+<div class="container text-center py-5">
+    <div class="py-5">
+        <i class="fa-solid fa-triangle-exclamation text-warning display-1 mb-3"></i>
+        <h1 class="display-4 fw-bold">500 - Internal Server Error</h1>
+        <p class="lead text-muted max-w-md mx-auto">Something went wrong on our server. Our technical team has been automatically notified.</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-custom-primary mt-3">Return to Homepage</a>
+    </div>
+</div>
+{% endblock %}

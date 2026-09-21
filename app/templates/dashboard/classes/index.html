@@ -1,0 +1,103 @@
+{% extends 'admin_base.html' %}
+{% block title %}Manage Classes{% endblock %}
+{% block header_title %}Classes & Sections Management{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-plus-circle text-primary me-2"></i> Create New Class</h4>
+            <form method="POST" action="{{ url_for('academic.classes') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Class Name *</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Class 10" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Class Code *</label>
+                    <input type="text" name="code" class="form-control" placeholder="e.g. CLS-10" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Division Category *</label>
+                    <select name="category" class="form-select">
+                        <option value="Pre-primary">Pre-primary</option>
+                        <option value="Primary">Primary</option>
+                        <option value="Middle School">Middle School</option>
+                        <option value="High School" selected>High School</option>
+                        <option value="Higher Secondary">Higher Secondary</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-bold">Create Class</button>
+            </form>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-layer-group text-success me-2"></i> Add Class Section</h4>
+            <form method="POST" action="{{ url_for('academic.add_section') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Class *</label>
+                    <select name="class_id" class="form-select" required>
+                        {% for c in classes %}
+                            <option value="{{ c.id }}">{{ c.name }} ({{ c.code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Section Name *</label>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Section A" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Max Capacity</label>
+                    <input type="number" name="capacity" class="form-control" value="40">
+                </div>
+                <button type="submit" class="btn btn-success w-100 fw-bold">Add Section</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-school me-2 text-primary"></i> Active Classes & Sections</h4>
+                <a href="{{ url_for('academic.subjects') }}" class="btn btn-outline-primary btn-sm fw-bold">Manage Subjects</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table custom-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Class Name</th>
+                            <th>Category</th>
+                            <th>Sections</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in classes %}
+                        <tr>
+                            <td class="fw-bold text-primary">{{ c.code }}</td>
+                            <td class="fw-semibold">{{ c.name }}</td>
+                            <td><span class="badge bg-light text-dark border">{{ c.category }}</span></td>
+                            <td>
+                                {% for s in c.sections %}
+                                    <span class="badge bg-primary-subtle text-primary border me-1">{{ s.name }}</span>
+                                {% else %}
+                                    <span class="text-muted small">No sections created</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center text-muted py-4">No classes created yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

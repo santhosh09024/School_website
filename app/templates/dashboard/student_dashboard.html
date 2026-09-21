@@ -1,0 +1,99 @@
+{% extends 'admin_base.html' %}
+{% block title %}Student Portal{% endblock %}
+{% block header_title %}Student Portal - Welcome {{ student.full_name if student else current_user.username }}{% endblock %}
+
+{% block content %}
+{% if student %}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <div class="d-flex align-items-center gap-3">
+                <div class="user-avatar fs-2" style="width: 60px; height: 60px;">{{ student.first_name[0] }}</div>
+                <div>
+                    <h5 class="fw-bold mb-0 text-dark">{{ student.full_name }}</h5>
+                    <div class="text-muted small">Admission #: {{ student.admission_number }}</div>
+                    <span class="badge bg-primary mt-1">{{ student.class_obj.name }} - {{ student.section_obj.name }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="metric-card">
+            <div>
+                <div class="metric-label">Roll Number</div>
+                <div class="metric-value">{{ student.roll_number }}</div>
+            </div>
+            <div class="metric-icon green"><i class="fa-solid fa-hashtag"></i></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="metric-card">
+            <div>
+                <div class="metric-label">Academic Status</div>
+                <div class="metric-value fs-5"><span class="badge bg-success">Active Enrolled</span></div>
+            </div>
+            <div class="metric-icon blue"><i class="fa-solid fa-user-check"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+            <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-graduation-cap me-2 text-primary"></i> Examination Marks & Grades</h5>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Subject</th>
+                            <th>Total Marks</th>
+                            <th>Grade</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in marks %}
+                        <tr>
+                            <td class="fw-bold">{{ m.subject_obj.name }}</td>
+                            <td>{{ m.total_marks }}</td>
+                            <td><span class="badge bg-primary">{{ m.grade }}</span></td>
+                            <td><span class="badge bg-success">PASS</span></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center text-muted">No exam marks logged yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-clipboard-user me-2 text-warning"></i> Attendance Log</h5>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in attendances %}
+                        <tr>
+                            <td>{{ a.date }}</td>
+                            <td><span class="badge-status {{ a.status.lower() }}">{{ a.status }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="2" class="text-center text-muted">No attendance recorded.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<p class="text-muted">Student profile not linked to user account.</p>
+{% endif %}
+{% endblock %}

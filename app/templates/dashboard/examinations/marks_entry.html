@@ -1,0 +1,74 @@
+{% extends 'admin_base.html' %}
+{% block title %}Marks Entry - {{ exam.title }}{% endblock %}
+{% block header_title %}Marks Entry Sheet for {{ exam.title }}{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-pen me-2 text-primary"></i> {{ exam.title }}</h4>
+            <small class="text-muted">Target Class: {{ exam.class_obj.name }}</small>
+        </div>
+        <form method="GET" action="{{ url_for('examination.marks_entry', exam_id=exam.id) }}" class="d-flex gap-2">
+            <select name="subject_id" class="form-select" onchange="this.form.submit();">
+                <option value="">-- Select Subject --</option>
+                {% for subj in subjects %}
+                    <option value="{{ subj.id }}" {% if selected_subject == subj.id %}selected{% endif %}>{{ subj.name }} ({{ subj.code }})</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    {% if selected_subject and students %}
+    <form method="POST" action="{{ url_for('examination.marks_entry', exam_id=exam.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="subject_id" value="{{ selected_subject }}">
+
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle bg-white">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Roll #</th>
+                        <th>Student Name</th>
+                        <th style="width: 130px;">Internal (20)</th>
+                        <th style="width: 130px;">Theory (60)</th>
+                        <th style="width: 130px;">Practical (20)</th>
+                        <th style="width: 120px;">Total</th>
+                        <th style="width: 100px;">Grade</th>
+                        <th>Remarks</th>
+                        <th style="width: 110px;">Report Card</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    {% set m = marks_map.get(s.id) %}
+                    <tr>
+                        <td class="fw-bold text-center">{{ s.roll_number }}</td>
+                        <td class="fw-semibold">{{ s.full_name }}</td>
+                        <td><input type="number" step="0.5" name="internal_{{ s.id }}" class="form-control form-control-sm" value="{{ m.internal_marks if m else 0 }}"></td>
+                        <td><input type="number" step="0.5" name="theory_{{ s.id }}" class="form-control form-control-sm" value="{{ m.theory_marks if m else 0 }}"></td>
+                        <td><input type="number" step="0.5" name="practical_{{ s.id }}" class="form-control form-control-sm" value="{{ m.practical_marks if m else 0 }}"></td>
+                        <td class="fw-bold text-center text-primary">{{ m.total_marks if m else 0 }}</td>
+                        <td class="fw-bold text-center"><span class="badge bg-primary">{{ m.grade if m else 'N/A' }}</span></td>
+                        <td><input type="text" name="remarks_{{ s.id }}" class="form-control form-control-sm" value="{{ m.remarks if m else '' }}"></td>
+                        <td class="text-center">
+                            <a href="{{ url_for('examination.report_card', exam_id=exam.id, student_id=s.id) }}" class="btn btn-sm btn-outline-info" title="View Report Card">
+                                <i class="fa-solid fa-file-pdf"></i> Card
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg fw-bold px-5">Save Subject Marks</button>
+    </form>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="fa-solid fa-book-open-reader fs-1 mb-2 text-warning"></i>
+        <p>Please select a subject from the dropdown above to load the marks entry table.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

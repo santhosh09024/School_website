@@ -1,0 +1,51 @@
+{% extends 'admin_base.html' %}
+{% block title %}Student Profile - {{ student.full_name }}{% endblock %}
+{% block header_title %}Student Identity Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="user-avatar fs-1" style="width: 70px; height: 70px;">{{ student.first_name[0] }}</div>
+                    <div>
+                        <h3 class="fw-bold text-dark mb-0">{{ student.full_name }}</h3>
+                        <span class="badge bg-primary fs-6">{{ student.class_obj.name }} ({{ student.section_obj.name }})</span>
+                    </div>
+                </div>
+                <button onclick="window.print();" class="btn btn-outline-secondary btn-sm fw-bold"><i class="fa-solid fa-print me-1"></i> Print Student Card</button>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded">
+                        <small class="text-muted d-block fw-semibold">Admission Number</small>
+                        <strong class="text-primary fs-5">{{ student.admission_number }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded">
+                        <small class="text-muted d-block fw-semibold">Roll Number</small>
+                        <strong class="text-dark fs-5">{{ student.roll_number }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded">
+                        <small class="text-muted d-block fw-semibold">Gender & Date of Birth</small>
+                        <strong>{{ student.gender }} | {{ student.date_of_birth }}</strong>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded">
+                        <small class="text-muted d-block fw-semibold">Phone & Address</small>
+                        <strong>{{ student.phone or 'N/A' }} | {{ student.address or 'N/A' }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ url_for('student.index') }}" class="btn btn-secondary fw-bold">Back to Students List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

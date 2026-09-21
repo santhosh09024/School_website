@@ -1,0 +1,101 @@
+{% extends 'admin_base.html' %}
+{% block title %}Mark Attendance{% endblock %}
+{% block header_title %}Class Daily Attendance Entry{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-clipboard-user me-2 text-primary"></i> Daily Attendance Sheet</h4>
+            <small class="text-muted">Select class, section, and date to record student attendance.</small>
+        </div>
+        <a href="{{ url_for('attendance.report') }}" class="btn btn-outline-primary fw-bold"><i class="fa-solid fa-chart-line me-1"></i> Attendance Reports</a>
+    </div>
+
+    <!-- Filter Form -->
+    <form method="GET" action="{{ url_for('attendance.mark') }}" class="row g-3 mb-4 bg-light p-3 rounded">
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Class *</label>
+            <select name="class_id" class="form-select" onchange="this.form.submit();">
+                <option value="">-- Select Class --</option>
+                {% for c in classes %}
+                    <option value="{{ c.id }}" {% if selected_class == c.id %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Section</label>
+            <select name="section_id" class="form-select" onchange="this.form.submit();">
+                <option value="">All Sections</option>
+                {% for s in sections %}
+                    <option value="{{ s.id }}" {% if selected_section == s.id %}selected{% endif %}>{{ s.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">Date</label>
+            <input type="date" name="date" class="form-control" value="{{ target_date.isoformat() }}" onchange="this.form.submit();">
+        </div>
+    </form>
+
+    {% if selected_class and students %}
+    <form method="POST" action="{{ url_for('attendance.mark') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="class_id" value="{{ selected_class }}">
+        <input type="hidden" name="section_id" value="{{ selected_section or '' }}">
+        <input type="hidden" name="date" value="{{ target_date.isoformat() }}">
+
+        <div class="table-responsive mb-4">
+            <table class="table align-middle table-bordered bg-white">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Roll #</th>
+                        <th>Student Name</th>
+                        <th>Attendance Status</th>
+                        <th>Remarks / Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in students %}
+                    {% set rec = attendance_map.get(s.id) %}
+                    {% set curr_status = rec.status if rec else 'Present' %}
+                    <tr>
+                        <td class="fw-bold text-center" style="width: 80px;">{{ s.roll_number }}</td>
+                        <td class="fw-semibold">
+                            <input type="hidden" name="student_ids" value="{{ s.id }}">
+                            {{ s.full_name }}
+                        </td>
+                        <td>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="status_{{ s.id }}" id="p_{{ s.id }}" value="Present" {% if curr_status == 'Present' %}checked{% endif %}>
+                                <label class="btn btn-outline-success btn-sm" for="p_{{ s.id }}">Present</label>
+
+                                <input type="radio" class="btn-check" name="status_{{ s.id }}" id="a_{{ s.id }}" value="Absent" {% if curr_status == 'Absent' %}checked{% endif %}>
+                                <label class="btn btn-outline-danger btn-sm" for="a_{{ s.id }}">Absent</label>
+
+                                <input type="radio" class="btn-check" name="status_{{ s.id }}" id="l_{{ s.id }}" value="Late" {% if curr_status == 'Late' %}checked{% endif %}>
+                                <label class="btn btn-outline-warning btn-sm" for="l_{{ s.id }}">Late</label>
+
+                                <input type="radio" class="btn-check" name="status_{{ s.id }}" id="lv_{{ s.id }}" value="Leave" {% if curr_status == 'Leave' %}checked{% endif %}>
+                                <label class="btn btn-outline-info btn-sm" for="lv_{{ s.id }}">Leave</label>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" name="remarks_{{ s.id }}" class="form-control form-control-sm" value="{{ rec.remarks if rec else '' }}" placeholder="Optional note...">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg fw-bold px-5">Save Attendance Sheet</button>
+    </form>
+    {% else %}
+    <div class="text-center py-5 text-muted">
+        <i class="fa-solid fa-clipboard-question fs-1 mb-2 text-warning"></i>
+        <p>Please select a class from the dropdown above to load the student list.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

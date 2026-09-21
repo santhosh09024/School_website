@@ -1,0 +1,89 @@
+{% extends 'admin_base.html' %}
+{% block title %}Attendance Analytics{% endblock %}
+{% block header_title %}Class Attendance Analytics & Summary{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h4 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chart-pie me-2 text-primary"></i> Attendance Summary</h4>
+            <small class="text-muted">Filter by class to inspect monthly attendance percentages.</small>
+        </div>
+        <form method="GET" action="{{ url_for('attendance.report') }}" class="d-flex gap-2">
+            <select name="class_id" class="form-select" onchange="this.form.submit();">
+                <option value="">All Classes</option>
+                {% for c in classes %}
+                    <option value="{{ c.id }}" {% if selected_class == c.id %}selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- Stat Metrics -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div>
+                    <div class="metric-label">Present</div>
+                    <div class="metric-value text-success">{{ stats.present }}</div>
+                </div>
+                <div class="metric-icon green"><i class="fa-solid fa-user-check"></i></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div>
+                    <div class="metric-label">Absent</div>
+                    <div class="metric-value text-danger">{{ stats.absent }}</div>
+                </div>
+                <div class="metric-icon amber"><i class="fa-solid fa-user-xmark"></i></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div>
+                    <div class="metric-label">Late / Leave</div>
+                    <div class="metric-value text-warning">{{ stats.late + stats.leave }}</div>
+                </div>
+                <div class="metric-icon purple"><i class="fa-solid fa-clock"></i></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card">
+                <div>
+                    <div class="metric-label">Attendance Rate</div>
+                    <div class="metric-value text-primary">{{ stats.percentage }}%</div>
+                </div>
+                <div class="metric-icon blue"><i class="fa-solid fa-percent"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table custom-table align-middle">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Student Name</th>
+                    <th>Status</th>
+                    <th>Recorded By</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.date }}</td>
+                    <td class="fw-bold">{{ r.student_obj.full_name if r.student_obj else '' }}</td>
+                    <td><span class="badge-status {{ r.status.lower() }}">{{ r.status }}</span></td>
+                    <td><small>{{ r.recorded_by or 'Admin' }}</small></td>
+                    <td>{{ r.remarks or '-' }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center text-muted py-4">Select a class to load attendance history logs.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

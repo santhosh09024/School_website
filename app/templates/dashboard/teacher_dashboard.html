@@ -1,0 +1,80 @@
+{% extends 'admin_base.html' %}
+{% block title %}Teacher Portal{% endblock %}
+{% block header_title %}Teacher Portal - Welcome {{ teacher.full_name if teacher else current_user.username }}{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="metric-card">
+            <div>
+                <div class="metric-label">Assigned Classes</div>
+                <div class="metric-value">{{ assignments|length }}</div>
+            </div>
+            <div class="metric-icon blue"><i class="fa-solid fa-chalkboard"></i></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="metric-card">
+            <div>
+                <div class="metric-label">Employee ID</div>
+                <div class="metric-value fs-5">{{ teacher.employee_id if teacher else 'N/A' }}</div>
+            </div>
+            <div class="metric-icon green"><i class="fa-solid fa-id-card"></i></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="metric-card">
+            <div>
+                <div class="metric-label">Department</div>
+                <div class="metric-value fs-5">{{ teacher.department if teacher else 'General' }}</div>
+            </div>
+            <div class="metric-icon purple"><i class="fa-solid fa-building-user"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+            <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-book-open me-2 text-primary"></i> My Teaching Subjects & Classes</h5>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Subject</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in assignments %}
+                        <tr>
+                            <td class="fw-bold">{{ a.class_obj.name }}</td>
+                            <td>{{ a.section_obj.name if a.section_obj else 'All' }}</td>
+                            <td><span class="badge bg-primary">{{ a.subject_obj.name }}</span></td>
+                            <td>
+                                <a href="{{ url_for('attendance.mark', class_id=a.class_id, section_id=a.section_id) }}" class="btn btn-sm btn-outline-success me-1">Mark Attendance</a>
+                                <a href="{{ url_for('examination.index') }}" class="btn btn-sm btn-outline-primary">Enter Marks</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-center text-muted">No class assignments set yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+            <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-bolt me-2 text-warning"></i> Quick Links</h5>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('attendance.mark') }}" class="btn btn-outline-primary text-start"><i class="fa-solid fa-clipboard-user me-2"></i> Daily Class Attendance</a>
+                <a href="{{ url_for('examination.index') }}" class="btn btn-outline-success text-start"><i class="fa-solid fa-pen-to-square me-2"></i> Examination Marks Entry</a>
+                <a href="{{ url_for('academic.timetable') }}" class="btn btn-outline-info text-start"><i class="fa-solid fa-calendar-days me-2"></i> My Class Timetable</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

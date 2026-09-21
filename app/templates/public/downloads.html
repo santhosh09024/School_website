@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Download Center - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Download Center</h1>
+        <p class="lead opacity-75">Access school prospectus, syllabi, timetables, and application forms.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        {% for d in documents %}
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="fa-solid fa-file-pdf text-danger fs-1"></i>
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary fw-bold mb-1">{{ d.category }}</span>
+                        <h5 class="fw-bold text-dark mb-1">{{ d.title }}</h5>
+                        <p class="text-muted small mb-0">{{ d.description or 'Official PDF document download.' }} ({{ d.file_size }})</p>
+                    </div>
+                </div>
+                <a href="{{ url_for('static', filename=d.file_path) }}" class="btn btn-outline-primary fw-bold btn-sm" download>
+                    <i class="fa-solid fa-download me-1"></i> Download
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <i class="fa-solid fa-folder-open text-muted fs-1 mb-3"></i>
+            <p class="text-muted">No documents uploaded to the download center yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

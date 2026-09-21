@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Student Life & Clubs - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Student Life & Extra-Curriculars</h1>
+        <p class="lead opacity-75">Fostering teamwork, creativity, leadership, and athletic excellence.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Sports Section -->
+    <div class="row align-items-center g-5 mb-5">
+        <div class="col-lg-6">
+            <span class="section-subtitle">Athletics & Physical Fitness</span>
+            <h2 class="section-title mb-3">Sports Excellence Program</h2>
+            <p class="text-muted">Our campus houses olympic-standard athletic tracks, indoor basketball courts, soccer fields, and a swimming pool mentored by national coaches.</p>
+            <div class="row g-3">
+                <div class="col-6"><i class="fa-solid fa-basketball text-warning me-2"></i> Basketball Team</div>
+                <div class="col-6"><i class="fa-solid fa-futbol text-primary me-2"></i> Soccer Club</div>
+                <div class="col-6"><i class="fa-solid fa-person-swimming text-info me-2"></i> Swimming Squad</div>
+                <div class="col-6"><i class="fa-solid fa-table-tennis-paddle-ball text-success me-2"></i> Table Tennis</div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=80" alt="Sports Grounds" class="img-fluid rounded-4 shadow-lg">
+        </div>
+    </div>
+
+    <!-- Student Clubs -->
+    <div class="py-4">
+        <div class="section-title-wrap">
+            <span class="section-subtitle">Co-Curricular Clubs</span>
+            <h2 class="section-title">Discover Your Passion</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                    <i class="fa-solid fa-robot text-primary fs-1 mb-3"></i>
+                    <h4 class="fw-bold">Robotics & AI Guild</h4>
+                    <p class="text-muted">Students build autonomous bots, code neural models, and compete in national robotics expos.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                    <i class="fa-solid fa-masks-theater text-danger fs-1 mb-3"></i>
+                    <h4 class="fw-bold">Drama & Performing Arts</h4>
+                    <p class="text-muted">Stage plays, musical theatre productions, and classical dance performances throughout the year.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                    <i class="fa-solid fa-comments text-warning fs-1 mb-3"></i>
+                    <h4 class="fw-bold">Model United Nations (MUN)</h4>
+                    <p class="text-muted">Sharpen public speaking, international diplomacy, policy drafting, and parliamentary debates.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

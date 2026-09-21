@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Information - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">
+            {% if page_type == 'faq' %}Frequently Asked Questions (FAQ)
+            {% elif page_type == 'privacy' %}Privacy Policy
+            {% else %}Terms & Conditions{% endif %}
+        </h1>
+        <p class="lead opacity-75">Important policies and guidelines for students, parents, and visitors.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+                {% if page_type == 'faq' %}
+                    <div class="accordion accordion-flush" id="faqAccordion">
+                        <div class="accordion-item mb-3 border rounded">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    What are the school operating hours?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted">Classes run Monday through Friday from 8:30 AM to 3:30 PM. Administrative offices remain open until 4:30 PM.</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 border rounded">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    How can parents check their child's attendance and marks?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted">Parents receive a unique portal login credential. Once logged in, you can view real-time attendance, examination report cards, timetable, and fee receipts.</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 border rounded">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    Is transport available for students?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted">Yes, our school operates a fleet of air-conditioned GPS-tracked buses covering major routes across the metropolitan region.</div>
+                            </div>
+                        </div>
+                    </div>
+                {% elif page_type == 'privacy' %}
+                    <h3 class="fw-bold mb-3">Privacy & Data Security Policy</h3>
+                    <p class="text-muted">Apex International Academy is committed to protecting student and parent personal data. All records including student profiles, grades, and payment logs are encrypted and stored in secure MySQL/SQLAlchemy data stores.</p>
+                {% else %}
+                    <h3 class="fw-bold mb-3">Terms & Conditions of Enrollment</h3>
+                    <p class="text-muted">By enrolling at Apex International Academy, parents and students agree to follow our code of conduct, attendance regulations, and academic integrity policies.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

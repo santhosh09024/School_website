@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Faculty Directory - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">Our Esteemed Faculty</h1>
+        <p class="lead opacity-75">Dedicated educators inspiring academic curiosity and moral leadership.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Department Filter Buttons -->
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+        <a href="{{ url_for('main.faculty') }}" class="btn btn-sm {% if not selected_dept %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-3 fw-semibold">All Departments</a>
+        {% for dept in departments %}
+            <a href="{{ url_for('main.faculty', dept=dept) }}" class="btn btn-sm {% if selected_dept == dept %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-3 fw-semibold">{{ dept }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Faculty Cards Grid -->
+    <div class="row g-4">
+        {% for t in teachers %}
+        <div class="col-lg-3 col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 text-center p-4">
+                <div class="mb-3">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="{{ t.full_name }}" class="rounded-circle shadow-sm border border-3 border-primary" style="width: 110px; height: 110px; object-fit: cover;">
+                </div>
+                <h5 class="fw-bold text-dark mb-1">{{ t.full_name }}</h5>
+                <span class="badge bg-primary-subtle text-primary fw-bold mb-2 align-self-center">{{ t.designation }}</span>
+                <p class="text-muted small mb-2"><i class="fa-solid fa-graduation-cap text-warning me-1"></i> {{ t.qualification }}</p>
+                <div class="text-muted small"><i class="fa-solid fa-briefcase text-secondary me-1"></i> {{ t.experience_years }} Years Teaching Experience</div>
+                <hr>
+                <p class="text-muted small mb-0">{{ t.bio or 'Dedicated educator shaping young leaders.' }}</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <i class="fa-solid fa-chalkboard-user text-muted fs-1 mb-3"></i>
+            <p class="text-muted">No faculty members found in this department.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

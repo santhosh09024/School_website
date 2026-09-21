@@ -1,0 +1,49 @@
+{% extends 'admin_base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block header_title %}User Profile Settings{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+            <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+                <div class="user-avatar fs-2" style="width: 60px; height: 60px;">{{ current_user.username[0].upper() }}</div>
+                <div>
+                    <h4 class="fw-bold text-dark mb-0">{{ current_user.username }}</h4>
+                    <span class="badge bg-primary">{{ current_user.role }} Account</span>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.profile') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Username</label>
+                    <input type="text" class="form-control" value="{{ current_user.username }}" disabled>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email Address *</label>
+                    <input type="email" name="email" class="form-control" value="{{ current_user.email }}" required>
+                </div>
+
+                <hr class="my-4">
+                <h5 class="fw-bold text-dark mb-3">Change Password</h5>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">New Password</label>
+                        <input type="password" name="new_password" class="form-control" placeholder="Leave blank to keep current">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Confirm New Password</label>
+                        <input type="password" name="confirm_password" class="form-control" placeholder="Re-type new password">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary fw-bold px-4">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

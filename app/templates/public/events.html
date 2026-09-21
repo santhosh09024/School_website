@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Events Calendar - {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<div class="bg-primary text-white py-5">
+    <div class="container text-center py-4">
+        <h1 class="display-4 fw-bold mb-2">School Events Calendar</h1>
+        <p class="lead opacity-75">Explore upcoming campus celebrations, fairs, and competitions.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h3 class="fw-bold text-dark mb-4"><i class="fa-regular fa-calendar-check text-warning me-2"></i> Upcoming Events</h3>
+    <div class="row g-4 mb-5">
+        {% for e in upcoming_events %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="{{ e.title }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body p-4">
+                    <span class="badge bg-primary mb-2"><i class="fa-regular fa-clock me-1"></i> {{ e.event_date }} ({{ e.event_time }})</span>
+                    <h5 class="fw-bold text-dark">{{ e.title }}</h5>
+                    <p class="text-muted small mb-3">{{ e.description }}</p>
+                    <div class="text-muted small mb-3"><i class="fa-solid fa-location-dot me-1 text-danger"></i> {{ e.location }}</div>
+                    {% if e.registration_link %}
+                    <a href="{{ e.registration_link }}" target="_blank" class="btn btn-warning btn-sm w-100 fw-bold">Register Online</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-4">
+            <p class="text-muted">No upcoming events scheduled right now.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if past_events %}
+    <h3 class="fw-bold text-dark mb-4"><i class="fa-solid fa-clock-rotate-left text-secondary me-2"></i> Past Events Archive</h3>
+    <div class="row g-4">
+        {% for e in past_events %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 opacity-75">
+                <span class="badge bg-secondary mb-2">{{ e.event_date }}</span>
+                <h5 class="fw-bold text-dark">{{ e.title }}</h5>
+                <p class="text-muted small mb-0">{{ e.description[:100] }}...</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

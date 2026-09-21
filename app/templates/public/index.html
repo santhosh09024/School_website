@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to {{ school_settings.school_name }}{% endblock %}
+
+{% block content %}
+<!-- Notice Ticker Bar -->
+{% if notices %}
+<div class="notice-ticker-bar">
+    <div class="container d-flex align-items-center">
+        <span class="notice-badge me-3"><i class="fa-solid fa-bullhorn me-1"></i> Latest Announcement</span>
+        <div class="ticker-content flex-grow-1 overflow-hidden">
+            <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
+                {% for n in notices %}
+                    <span class="me-5"><a href="{{ url_for('main.notices') }}" class="text-white text-decoration-none fw-semibold">📢 {{ n.title }} ({{ n.publish_date }})</a></span>
+                {% endfor %}
+            </marquee>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Hero Banner -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-warning text-dark fw-bold px-3 py-2 text-uppercase mb-3 rounded-pill">Premier Educational Institution</span>
+                <h1 class="hero-title">Welcome to<br>EduLead International School</h1>
+                <p class="hero-subtitle">We provide quality education, holistic development and a safe environment for every child to grow and excel in life.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('main.admissions') }}" class="btn btn-custom-primary fw-bold fs-5 shadow">Apply for Admission</a>
+                    <a href="{{ url_for('main.about') }}" class="btn btn-custom-outline fw-bold fs-5">Explore Our School</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Floating Dark Counter Bar -->
+<div class="floating-stats-wrapper">
+    <div class="container">
+        <div class="floating-stats-bar">
+            <div class="row g-4 text-center text-md-start">
+                <div class="col-md-3 col-6">
+                    <div class="counter-item">
+                        <i class="fa-solid fa-user-graduate counter-icon"></i>
+                        <div>
+                            <div class="counter-number">1200+</div>
+                            <div class="counter-label">Students</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="counter-item">
+                        <i class="fa-solid fa-chalkboard-user counter-icon"></i>
+                        <div>
+                            <div class="counter-number">80+</div>
+                            <div class="counter-label">Teachers</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="counter-item">
+                        <i class="fa-solid fa-school counter-icon"></i>
+                        <div>
+                            <div class="counter-number">25+</div>
+                            <div class="counter-label">Classrooms</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="counter-item">
+                        <i class="fa-solid fa-award counter-icon"></i>
+                        <div>
+                            <div class="counter-number">15+</div>
+                            <div class="counter-label">Awards Won</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Why Choose EduLead? Section -->
+<section class="py-5 bg-light" style="padding-top: 5rem !important;">
+    <div class="container py-4">
+        <div class="section-title-wrap text-center mb-5">
+            <h2 class="section-title">Why Choose EduLead?</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-graduation-cap fs-1 text-primary p-3 bg-primary-subtle rounded-circle"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark fs-5">Quality Education</h4>
+                    <p class="text-muted small mb-0">Excellence in teaching and learning with global curriculum standards.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-user-tie fs-1 text-success p-3 bg-success-subtle rounded-circle"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark fs-5">Experienced Faculty</h4>
+                    <p class="text-muted small mb-0">Dedicated and qualified teachers committed to student mentorship.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-building-columns fs-1 text-warning p-3 bg-warning-subtle rounded-circle"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark fs-5">Modern Facilities</h4>
+                    <p class="text-muted small mb-0">Smart classrooms, science & computer labs, digital library & sports complex.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-shapes fs-1 text-info p-3 bg-info-subtle rounded-circle"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark fs-5">Holistic Development</h4>
+                    <p class="text-muted small mb-0">Balanced emphasis on sports, arts, leadership clubs and co-curriculars.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Facilities Section -->
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="section-title-wrap text-center mb-5">
+            <span class="section-subtitle">World-Class Infrastructure</span>
+            <h2 class="section-title">Our Facilities</h2>
+            <p class="text-muted">We provide world-class facilities for our students to learn and grow.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Smart Classrooms" style="height: 200px; object-fit: cover;">
+                    <div class="card-body p-3 text-center">
+                        <h5 class="fw-bold text-dark mb-0">Smart Classrooms</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Science Labs" style="height: 200px; object-fit: cover;">
+                    <div class="card-body p-3 text-center">
+                        <h5 class="fw-bold text-dark mb-0">Science Labs</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Computer Lab" style="height: 200px; object-fit: cover;">
+                    <div class="card-body p-3 text-center">
+                        <h5 class="fw-bold text-dark mb-0">Computer Lab</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Library" style="height: 200px; object-fit: cover;">
+                    <div class="card-body p-3 text-center">
+                        <h5 class="fw-bold text-dark mb-0">Library</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Sports Complex" style="height: 200px; object-fit: cover;">
+                    <div class="card-body p-3 text-center">
+                        <h5 class="fw-bold text-dark mb-0">Sports Complex</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1557223562-6c77ef16210f?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Transport" style="height: 200px; object-fit: cover;">
+                    <div class="card-body p-3 text-center">
+                        <h5 class="fw-bold text-dark mb-0">School Transport</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Location & Contact Map Section -->
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5">
+                <span class="section-subtitle">Visit Our Campus</span>
+                <h2 class="section-title mb-3">Location & Directions</h2>
+                <p class="text-muted">We welcome prospective parents and students for campus tours during office hours.</p>
+                <div class="mb-3"><i class="fa-solid fa-map-location-dot text-primary fs-4 me-3"></i> <strong>Address:</strong> {{ school_settings.address }}</div>
+                <div class="mb-3"><i class="fa-solid fa-phone text-success fs-4 me-3"></i> <strong>Phone:</strong> {{ school_settings.phone }}</div>
+                <div class="mb-3"><i class="fa-solid fa-envelope text-warning fs-4 me-3"></i> <strong>Email:</strong> {{ school_settings.email }}</div>
+            </div>
+            <div class="col-lg-7">
+                <div class="rounded-4 overflow-hidden shadow-lg" style="height: 350px;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345093747!2d144.9537353153166!3d-37.81627977975171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d4c2b349649%3A0xb6899234e561db11!2sEnvato!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
