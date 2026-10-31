@@ -100,6 +100,7 @@ def seed_database():
 
     # 7. Teachers
     t_john = Teacher.query.filter_by(user_id=user_objs['teacher_john'].id).first()
+    t_sarah = Teacher.query.filter_by(user_id=user_objs['teacher_sarah'].id).first()
     if not t_john:
         t_john = Teacher(
             user_id=user_objs['teacher_john'].id,
@@ -115,6 +116,8 @@ def seed_database():
             experience_years=8,
             bio='Passionate about experimental physics and inspiring young minds in STEM fields.'
         )
+        db.session.add(t_john)
+    if not t_sarah:
         t_sarah = Teacher(
             user_id=user_objs['teacher_sarah'].id,
             employee_id='EMP-1002',
@@ -129,8 +132,8 @@ def seed_database():
             experience_years=12,
             bio='Dedicated to making complex mathematical concepts intuitive and enjoyable.'
         )
-        db.session.add_all([t_john, t_sarah])
-        db.session.commit()
+        db.session.add(t_sarah)
+    db.session.commit()
 
     # 8. Parents
     p_robert = Parent.query.filter_by(user_id=user_objs['parent_robert'].id).first()
@@ -149,6 +152,7 @@ def seed_database():
 
     # 9. Students
     s_alex = Student.query.filter_by(admission_number='ADM-2025-001').first()
+    s_emma = Student.query.filter_by(admission_number='ADM-2025-002').first()
     if not s_alex:
         s_alex = Student(
             user_id=user_objs['student_alex'].id,
@@ -166,6 +170,8 @@ def seed_database():
             address='742 Evergreen Terrace, Knowledge City',
             admission_date=date(2025, 6, 5)
         )
+        db.session.add(s_alex)
+    if not s_emma:
         s_emma = Student(
             user_id=user_objs['student_emma'].id,
             admission_number='ADM-2025-002',
@@ -182,8 +188,8 @@ def seed_database():
             address='12 Baker Street, Knowledge City',
             admission_date=date(2025, 6, 6)
         )
-        db.session.add_all([s_alex, s_emma])
-        db.session.commit()
+        db.session.add(s_emma)
+    db.session.commit()
 
     # 10. Admission Applications
     if not AdmissionApplication.query.filter_by(application_number='ADM-APP-101').first():
